@@ -1901,8 +1901,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  jumpForce: 4
   isGrounded: 0
+  defaultCoyoteTime: 0.1
+  coyoteTimeRemaining: 0
+  jumpForce: {x: 0, y: 4}
   counterJumpForce: {x: 0, y: -9}
 --- !u!50 &827263969
 Rigidbody2D:

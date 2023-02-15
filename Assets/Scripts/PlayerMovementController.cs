@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class PlayerMovementController : MonoBehaviour
 {
-    public float speed;
-    public float jumpForce;
-    
+    public float speed;    
     private float inputMovement;
 
+    [Header("Jumping")]
     public bool isGrounded = false;
+    public float defaultCoyoteTime = 5f;
+    public float coyoteTimeRemaining;
     private bool jumpKeyHeld = false;
     private bool isOnUpwardJump = false;
+    public Vector2 jumpForce = new Vector2(0, 4);
     public Vector2 counterJumpForce = new Vector2(0, -9);
 
     private Rigidbody2D rbody;
@@ -35,6 +37,9 @@ public class PlayerMovementController : MonoBehaviour
             spriteRenderer.flipX = false;
 
         rbody.velocity = new Vector2(inputMovement * speed, rbody.velocity.y);
+
+        if (!isGrounded)
+            coyoteTimeRemaining -= Time.deltaTime;
 
         HandleVariableJump();
 
@@ -60,14 +65,15 @@ public class PlayerMovementController : MonoBehaviour
         {
             jumpKeyHeld = true;
             
-            if (isGrounded)
+            if (coyoteTimeRemaining > 0f)
             {
                 // We apply a single jump force here that will take the player to their 
                 // MAXIMUM jump height. However, if they don't continue to hold down the
                 // jump key throughout their jump, a counteracting force will dampen the
                 // reached height.
                 isOnUpwardJump = true;
-                rbody.AddForce(Vector2.up * jumpForce * rbody.mass, ForceMode2D.Impulse);
+                coyoteTimeRemaining = 0f;
+                rbody.AddForce(jumpForce * rbody.mass, ForceMode2D.Impulse);
             }
 
         } else if (Input.GetButtonUp("Jump"))
@@ -82,6 +88,8 @@ public class PlayerMovementController : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             isGrounded = true;
+
+            coyoteTimeRemaining = defaultCoyoteTime;
         }
     }
 
