@@ -16,7 +16,6 @@ public class DownablePlatform : MonoBehaviour
     {
         float verticalInput = Input.GetAxis("Vertical");
         bool pressingDownInput = verticalInput < -0.9f;
-        Debug.Log(verticalInput);
 
         if (!pressingDownInput)
         {
