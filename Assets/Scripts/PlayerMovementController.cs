@@ -9,8 +9,8 @@ public class PlayerMovementController : MonoBehaviour
 
     [Header("Jumping")]
     public bool isGrounded = false;
-    public float defaultCoyoteTime = 5f;
-    public float coyoteTimeRemaining;
+    public float defaultCoyoteTime = 0.1f;
+    public float coyoteTimeRemaining = 0f;
     private bool jumpKeyHeld = false;
     private bool isOnUpwardJump = false;
     public Vector2 jumpForce = new Vector2(0, 4);
@@ -42,6 +42,8 @@ public class PlayerMovementController : MonoBehaviour
             coyoteTimeRemaining -= Time.deltaTime;
 
         HandleVariableJump();
+
+        HandleAttackInput();
 
         animator.SetBool("Grounded", isGrounded);
         animator.SetFloat("VerticalVelocity", rbody.velocity.y);
@@ -82,6 +84,20 @@ public class PlayerMovementController : MonoBehaviour
         }
     }
     #endregion Jumping
+
+    #region Attacking
+    private void HandleAttackInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            animator.SetTrigger("PlayAttack1");
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            animator.SetTrigger("PlayAttack2");
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            animator.SetTrigger("PlayAttack3");
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            animator.SetTrigger("PlayAttack4");
+    }
+    #endregion Attacking
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
