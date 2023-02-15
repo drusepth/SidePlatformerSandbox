@@ -96,6 +96,8 @@ public class PlayerMovementController : MonoBehaviour
             animator.SetTrigger("PlayAttack3");
         if (Input.GetKeyDown(KeyCode.Alpha4))
             animator.SetTrigger("PlayAttack4");
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+            animator.SetTrigger("PlayDeathAnimation");
     }
     #endregion Attacking
 
