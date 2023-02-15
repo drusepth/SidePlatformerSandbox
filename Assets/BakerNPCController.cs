@@ -10,7 +10,8 @@ public class BakerNPCController : MonoBehaviour
     public float moveSpeed = 0.4f;
 
     private Vector2 originPoint;
-    public float maxTravelDistanceFromOrigin = 5f;
+    public float maxXTravelDistanceFromOrigin = 5f;
+    public float maxYTravelDistanceFromOrigin = 1f;
     private float moveStoppingDistance = 0.1f;
 
     public float minIdleTime = 1f;
@@ -60,8 +61,8 @@ public class BakerNPCController : MonoBehaviour
     public void AssignNewMovementTarget()
     {
         moveTarget = originPoint + new Vector2(
-            x: Random.Range(-maxTravelDistanceFromOrigin, maxTravelDistanceFromOrigin), 
-            y: 0
+            x: Random.Range(-maxXTravelDistanceFromOrigin, maxXTravelDistanceFromOrigin), 
+            y: Random.Range(-maxYTravelDistanceFromOrigin, maxYTravelDistanceFromOrigin)
         );
         isMoving = true;
 

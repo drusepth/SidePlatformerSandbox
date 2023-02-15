@@ -3377,11 +3377,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7009614809605002860, guid: 023eedcfdaedda3439ce83a4f07b9895, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.932
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 7009614809605002860, guid: 023eedcfdaedda3439ce83a4f07b9895, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.666
+      value: -3.8
       objectReference: {fileID: 0}
     - target: {fileID: 7009614809605002860, guid: 023eedcfdaedda3439ce83a4f07b9895, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3437,7 +3437,8 @@ MonoBehaviour:
   isMoving: 0
   isIdling: 0
   moveSpeed: 0.3
-  maxTravelDistanceFromOrigin: 8
+  maxXTravelDistanceFromOrigin: 5
+  maxYTravelDistanceFromOrigin: 0.2
   minIdleTime: 3
   maxIdleTime: 8
 --- !u!1001 &2224962052116299205
