@@ -41,8 +41,7 @@ public class PlayerMovementController : MonoBehaviour
         if (!isGrounded)
             coyoteTimeRemaining -= Time.deltaTime;
 
-        HandleVariableJump();
-
+        HandleVariableJumpInput();
         HandleAttackInput();
 
         animator.SetBool("Grounded", isGrounded);
@@ -61,7 +60,7 @@ public class PlayerMovementController : MonoBehaviour
     }
 
     #region Jumping
-    private void HandleVariableJump()
+    private void HandleVariableJumpInput()
     {
         if (Input.GetButtonDown("Jump"))
         {
@@ -105,11 +104,12 @@ public class PlayerMovementController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Ground")
+        switch (collision.gameObject.tag)
         {
-            isGrounded = true;
-
-            coyoteTimeRemaining = defaultCoyoteTime;
+            case "Ground":
+                isGrounded = true;
+                coyoteTimeRemaining = defaultCoyoteTime;
+                break;
         }
     }
 
