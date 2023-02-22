@@ -8,10 +8,12 @@ public class ParallaxBackgroundEffect : MonoBehaviour
     public GameObject mainCamera;
     public float parallaxStrength;
 
+    public float extraTileLengthPadding = 0f;
+
     void Start()
     {
         currentPosition = transform.position.x;
-        imageTileLength = GetComponent<SpriteRenderer>().bounds.size.x;
+        imageTileLength = GetComponent<SpriteRenderer>().bounds.size.x + extraTileLengthPadding;
     }
 
     void FixedUpdate()
