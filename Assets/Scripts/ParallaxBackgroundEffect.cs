@@ -12,8 +12,6 @@ public class ParallaxBackgroundEffect : MonoBehaviour
     {
         currentPosition = transform.position.x;
         imageTileLength = GetComponent<SpriteRenderer>().bounds.size.x;
-
-        Debug.Log(gameObject.name + " startPos is " + currentPosition + " / length = " + imageTileLength);
     }
 
     void FixedUpdate()
