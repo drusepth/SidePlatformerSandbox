@@ -78,17 +78,47 @@ public class PlayerMovementController : MonoBehaviour
             spriteRenderer.flipX = false;
     }
 
-    void OnFire(InputValue input)
-    {
-        // rigidBody.AddForce(Vector2.up * jumpForce)
-    }
-
     void OnJump(InputValue input)
     {
         // This fires when the player presses jump (with value 1) and when the player releases the
         // jump button (with value 0), so we simulate an isKeyPressed flag at the beginning/end
         // instead of firing on every frame in the meantime.
         jumpKeyIsPressed = (input.Get<float>() == 1f);
+    }
+
+    void OnBasicAttack(InputValue input)
+    {
+        /*
+         * Implemented animations:
+         * 
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            animator.SetTrigger("PlayAttack1");
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            animator.SetTrigger("PlayAttack2");
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            animator.SetTrigger("PlayAttack3");
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            animator.SetTrigger("PlayAttack4");
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+            animator.SetTrigger("PlayHitRecoil");
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+            animator.SetTrigger("PlayDeathAnimation");
+        */
+
+        animator.SetTrigger("PlayAttack1");
+    }
+
+    void OnAdvancedAttack(InputValue input)
+    {
+        // TODO add a downward velocity to strong attacks so they look cooler from the air?
+        animator.SetTrigger("PlayAttack2");
+    }
+
+    void OnInteract(InputValue input)
+    {
+        // TODO actual logic for interacting with objects in the world
+        // (maybe use this button to show a left-DPAD option list to choose from)
+        animator.SetTrigger("PlayAttack4");
     }
 
     void HandleVariableJumpInput()
@@ -106,27 +136,7 @@ public class PlayerMovementController : MonoBehaviour
             }
         }
     }
-
-    /*
-
-    #region Attacking
-    private void HandleAttackInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            animator.SetTrigger("PlayAttack1");
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            animator.SetTrigger("PlayAttack2");
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            animator.SetTrigger("PlayAttack3");
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            animator.SetTrigger("PlayAttack4");
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-            animator.SetTrigger("PlayHitRecoil");
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-            animator.SetTrigger("PlayDeathAnimation");
-    }
-    #endregion Attacking
-    */
+    
     private void OnCollisionEnter2D(Collision2D collision)
     {
         switch (collision.gameObject.tag)
