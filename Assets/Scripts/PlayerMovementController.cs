@@ -1,18 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovementController : MonoBehaviour
 {
-    public float speed;    
-    private float inputMovement;
+    public float accelerationSpeed = 20f;
+    public float maxSpeed = 2f;
+    private Vector2 movementInput;
 
     [Header("Jumping")]
     public bool isGrounded = false;
     public float defaultCoyoteTime = 0.1f;
     public float coyoteTimeRemaining = 0f;
-    private bool jumpKeyHeld = false;
-    private bool isOnUpwardJump = false;
+    private bool jumpKeyIsPressed = false;
     public Vector2 jumpForce = new Vector2(0, 4);
     public Vector2 counterJumpForce = new Vector2(0, -9);
 
@@ -20,7 +21,7 @@ public class PlayerMovementController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Animator animator;
 
-    void Start()
+    void Awake()
     {
         rbody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -29,60 +30,84 @@ public class PlayerMovementController : MonoBehaviour
 
     void Update()
     {
-        inputMovement = Input.GetAxis("Horizontal");
-
-        if (inputMovement < -0.1f)
-            spriteRenderer.flipX = true;
-        if (inputMovement > 0.1f)
-            spriteRenderer.flipX = false;
-
-        rbody.velocity = new Vector2(inputMovement * speed, rbody.velocity.y);
-
         if (!isGrounded)
             coyoteTimeRemaining -= Time.deltaTime;
 
-        HandleVariableJumpInput();
-        HandleAttackInput();
-
         animator.SetBool("Grounded", isGrounded);
+
+        HandleVariableJumpInput();
+        // HandleAttackInput();
+
+    }
+
+    void FixedUpdate()
+    {
+        // Keyboard WASD input can include vertical input (can't figure out how to exclude it in input config),
+        // so we strip any vertical input out before using it.
+        Vector2 horizontalInput = new Vector2(movementInput.x, 0);
+
+        // Horizontal movement
+        // rbody.velocity = new Vector2(movementInput.x * speed, rbody.velocity.y);
+        rbody.AddForce(horizontalInput * accelerationSpeed);
+
+        // We achieve a variable jump height by applying a downward force when the player
+        // ISN'T holding down the jump button.
+        if (!jumpKeyIsPressed && !isGrounded)
+            rbody.AddForce(counterJumpForce * rbody.mass);
+
+        // Cap our velocity to sane levels
+        rbody.velocity = new Vector2(
+            Mathf.Clamp(rbody.velocity.x, -maxSpeed, maxSpeed),
+            rbody.velocity.y
+        );
+
+        Debug.Log(rbody.velocity.x + " / " + accelerationSpeed);
+
         animator.SetFloat("VerticalVelocity", rbody.velocity.y);
         animator.SetFloat("HorizontalVelocity", Mathf.Abs(rbody.velocity.x));
     }
 
-    private void FixedUpdate()
+    void OnMove(InputValue input)
     {
-        // We achieve a variable jump height by applying a downward force when the player
-        // ISN'T holding down the jump button.
-        if (isOnUpwardJump && !jumpKeyHeld)
-        {
-            rbody.AddForce(counterJumpForce * rbody.mass);
-        }
+        movementInput = input.Get<Vector2>();
+        
+        // Handle left/right sprites based on movement direction
+        if (movementInput.x < -0.1f)
+            spriteRenderer.flipX = true;
+        if (movementInput.x > 0.1f)
+            spriteRenderer.flipX = false;
     }
 
-    #region Jumping
-    private void HandleVariableJumpInput()
+    void OnFire(InputValue input)
     {
-        if (Input.GetButtonDown("Jump"))
+        // rigidBody.AddForce(Vector2.up * jumpForce)
+    }
+
+    void OnJump(InputValue input)
+    {
+        // This fires when the player presses jump (with value 1) and when the player releases the
+        // jump button (with value 0), so we simulate an isKeyPressed flag at the beginning/end
+        // instead of firing on every frame in the meantime.
+        jumpKeyIsPressed = (input.Get<float>() == 1f);
+    }
+
+    void HandleVariableJumpInput()
+    {
+        if (jumpKeyIsPressed)
         {
-            jumpKeyHeld = true;
-            
             if (coyoteTimeRemaining > 0f)
             {
                 // We apply a single jump force here that will take the player to their 
                 // MAXIMUM jump height. However, if they don't continue to hold down the
                 // jump key throughout their jump, a counteracting force will dampen the
                 // reached height.
-                isOnUpwardJump = true;
                 coyoteTimeRemaining = 0f;
                 rbody.AddForce(jumpForce * rbody.mass, ForceMode2D.Impulse);
             }
-
-        } else if (Input.GetButtonUp("Jump"))
-        {
-            jumpKeyHeld = false;
         }
     }
-    #endregion Jumping
+
+    /*
 
     #region Attacking
     private void HandleAttackInput()
@@ -101,7 +126,7 @@ public class PlayerMovementController : MonoBehaviour
             animator.SetTrigger("PlayDeathAnimation");
     }
     #endregion Attacking
-
+    */
     private void OnCollisionEnter2D(Collision2D collision)
     {
         switch (collision.gameObject.tag)

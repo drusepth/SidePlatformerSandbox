@@ -14,6 +14,8 @@ public class DownablePlatform : MonoBehaviour
 
     void Update()
     {
+        /*
+         * Trigger a "through platform" descent when pressing jump while DOWN is held
         float verticalInput = Input.GetAxis("Vertical");
         bool pressingDownInput = verticalInput < -0.9f;
 
@@ -35,5 +37,6 @@ public class DownablePlatform : MonoBehaviour
                 waitTime -= Time.deltaTime;
             }
         }
+        */
     }
 }
