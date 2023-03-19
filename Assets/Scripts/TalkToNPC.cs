@@ -17,6 +17,7 @@ public class TalkToNPC : MonoBehaviour
 
     void Update()
     {
+        /*
         if (playerInInteractionRange && Input.GetKeyDown(KeyCode.E))
         {
             // Since we use the same key to start conversations AND continue
@@ -25,6 +26,7 @@ public class TalkToNPC : MonoBehaviour
             if (!DialogueManager.Instance.CurrentlyInConversation())
                 StartDialogue();
         }
+        */
     }
 
     void StartDialogue()
